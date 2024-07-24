@@ -71,7 +71,27 @@ li.main-list {
 
 .game {
   display: flex;
-  align-items: center; /* Align items vertically in the center */
-  gap: 10px; /* Add some space between the elements */
+  flex-direction: column;
+  /*align-items: center;*/
 }
+
+.away-team, .home-team {
+  display: inline-flex; /* Display items in a row */
+  
+  flex-direction: row;
+  align-items: center; /* Align items vertically in the center */
+  gap: 10px; /* Optional: adds space between items */
+  border: #61dafbaa 1px solid;
+  max-width: 40%;
+}
+
+/* Optional: Style for the <p> tags to remove default margins */
+.away-team p, .home-team p {
+  margin: 0;
+}
+
+.away-team:hover, .home-team:hover {
+  background-color: #00ff00; /* Green background on hover */
+}
+
 
