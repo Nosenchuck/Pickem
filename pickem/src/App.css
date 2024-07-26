@@ -82,7 +82,7 @@ li.main-list {
   align-items: center; /* Align items vertically in the center */
   gap: 10px; /* Optional: adds space between items */
   border: #61dafbaa 1px solid;
-  max-width: 40%;
+  max-width: 50%;
 }
 
 /* Optional: Style for the <p> tags to remove default margins */
@@ -91,7 +91,7 @@ li.main-list {
 }
 
 .away-team:hover, .home-team:hover {
-  background-color: #00ff00; /* Green background on hover */
+  background-color: #2f00ff; /* Green background on hover */
 }
 
 .record{
@@ -104,4 +104,14 @@ li.main-list {
   
 }
 
+.scores{
+  color: white;
+}
 
+.highlight-green {
+  color: #00ff00;
+}
+
+.highlight-red {
+  color: red;
+}

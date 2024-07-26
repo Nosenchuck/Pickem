@@ -164,6 +164,7 @@ function App() {
                       season_type={season_type} 
                       season={season}
                       gameID={game.gameID}
+                      teamID={game.teamIDAway}
                       
                       />
                   </div>
@@ -188,6 +189,7 @@ function App() {
                       season_type={season_type} 
                       season={season}
                       gameID={game.gameID}
+                      teamID={game.teamIDHome}
                       
                       />
                   </div>

@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
 import { Link } from "react-router-dom";
 
-const GameBoxScore = ({ week, season_type, season, gameID }) => {
+const GameBoxScore = ({ week, season_type, season, gameID, teamID }) => {
     const [gameScores, setGameScores] = useState(null);
-    const [homePts, setHomePts] = useState(null);
-    const [awayPts, setAwayPts] = useState(null);
+    const [teamPts, setTeamPts] = useState(null);
+    const [opponentPts, setOpponentPts] = useState(null);
 
     useEffect(() => {
         const fetchGameScores = async () => {
@@ -46,28 +46,39 @@ const GameBoxScore = ({ week, season_type, season, gameID }) => {
             const gameData = gamesArray.find(game => game.gameID === gameID);
 
             if (gameData) {
+                console.log('Game Data:', gameData);
+                console.log('Team ID:', teamID);
+
                 const awayPoints = gameData.awayPts;
                 const homePoints = gameData.homePts;
 
-                // Update state
-                setAwayPts(awayPoints);
-                setHomePts(homePoints);
-                console.log(`Away Points: ${awayPoints}, Home Points: ${homePoints}`);
+                // Update state based on teamID
+                if (gameData.teamIDAway === teamID) {
+                    setTeamPts(awayPoints);
+                    setOpponentPts(homePoints);
+                } else if (gameData.teamIDHome === teamID) {
+                    setTeamPts(homePoints);
+                    setOpponentPts(awayPoints);
+                } else {
+                    console.error('Team ID not found in game data:', teamID);
+                }
+                console.log(`Team Points: ${teamPts}`);
             } else {
                 console.error('Game data not found for gameID:', gameID);
             }
         }
-    }, [gameScores, gameID]);
+    }, [gameScores, gameID, teamID]);
+
+    const isTeamWinning = teamPts !== null && opponentPts !== null && teamPts > opponentPts;
+    const isTeamLosing = teamPts !== null && opponentPts !== null && teamPts < opponentPts;
 
     return (
-        <div>
-            <Link>
-                <div>( {awayPts !== null ? awayPts : 'Loading...'} - {homePts !== null ? homePts : 'Loading...'} )</div>
-                {/*<div>Home: {homePts !== null ? homePts : 'Loading...'}</div>*/}
-                
-            </Link>
-        </div>
-    );
+      <div className="scores">
+          <p className={isTeamWinning ? 'highlight-green' : isTeamLosing ? 'highlight-red' : ''}>
+              Points Scored: {teamPts !== null ? teamPts : 'Loading...'}
+          </p>
+      </div>
+  );
 };
 
 export default GameBoxScore;
