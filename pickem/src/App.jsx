@@ -3,6 +3,9 @@ import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
 const API_KEY = import.meta.env.VITE_APP_API_KEY;
+import { Link } from "react-router-dom";
+import GameBoxScore from './Components/GameBoxScore';
+
 
 //review lab 5 and 6. will need to make components to pass
 //props like team image icon, game id to match game scores/results for
@@ -15,8 +18,9 @@ function App() {
   const [season, setSeason] = useState('2023');
   //const [maxWeek, setMaxWeek] = useState(17);
   const [games, setGames] = useState([]);
+  //const [gameScores, setGameScores] = useState([]);
+
   const [team_img, setTeam_img] = useState([]);
-  const [gameScores, setGameScores] = useState([]);
   const [wins, setWins] = useState([]);
   const [losses, setLosses] = useState([]);
   const [tie, setTie] = useState([]);
@@ -58,7 +62,7 @@ function App() {
   // use this api to also get win loss records for each team
   useEffect(() => {
     const fetchTeams = async () => {
-      const url = 'https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeams?sortBy=standings&rosters=false&schedules=false&topPerformers=false&teamStats=false&teamStatsSeason=false';
+      const url = `https://tank01-nfl-live-in-game-real-time-statistics-nfl.p.rapidapi.com/getNFLTeams?sortBy=standings&rosters=false&schedules=false&topPerformers=false&teamStats=true&teamStatsSeason=${season}`;
       const options = {
         method: 'GET',
         headers: {
@@ -97,7 +101,7 @@ function App() {
     };
   
     fetchTeams();
-  }, []);
+  }, [season]);
 
   
 
@@ -132,7 +136,7 @@ function App() {
          {/* select season */}
         <label htmlFor="season-select">Choose a season:</label>
         <select id="season-select" value={season} onChange={(e) => setSeason(e.target.value)}>
-          {Array.from({ length: 2 }, (_, i) => (
+          {Array.from({ length: 3 }, (_, i) => (
             <option key={2022 + i} value={2022 + i}>
               {2022 + i}
             </option>
@@ -146,20 +150,47 @@ function App() {
               <div className="game">
                 <div className="away-team">
                   <img src={team_img[game.teamIDAway]} alt="Away Team Logo" style={{ width: '50px' }} />
-                  <p>{game.away}</p><p>:</p>
-                  <p>{wins[game.teamIDAway]}</p><p>-</p>
-                  <p>{losses[game.teamIDAway]}</p><p>-</p>
-                  <p>{tie[game.teamIDAway]}</p>
+                  <p>{game.away}</p>
+                  <div className='record'>
+                    <p>(</p>
+                    <p>{wins[game.teamIDAway]}</p><p>-</p>
+                    <p>{losses[game.teamIDAway]}</p><p>-</p>
+                    <p>{tie[game.teamIDAway]}</p>
+                    <p>)</p>
+                  </div>
+                  <div className = "away-score">
+                    <GameBoxScore 
+                      week={week} 
+                      season_type={season_type} 
+                      season={season}
+                      gameID={game.gameID}
+                      
+                      />
+                  </div>
+
                   
                   
                   
                 </div>
                 <div className="home-team" onClick={selectTeam}>
                   <img src={team_img[game.teamIDHome]} alt="Home Team Logo" style={{ width: '50px' }} />
-                  <p>{game.home}</p><p>:</p>
-                  <p>{wins[game.teamIDHome]}</p><p>-</p>
-                  <p>{losses[game.teamIDHome]}</p><p>-</p>
-                  <p>{tie[game.teamIDHome]}</p>
+                  <p>{game.home}</p>
+                  <div className='record'>
+                    <p>(</p>
+                    <p>{wins[game.teamIDHome]}</p><p>-</p>
+                    <p>{losses[game.teamIDHome]}</p><p>-</p>
+                    <p>{tie[game.teamIDHome]}</p>
+                    <p>)</p>
+                  </div>
+                  <div className = "away-score">
+                    <GameBoxScore 
+                      week={week} 
+                      season_type={season_type} 
+                      season={season}
+                      gameID={game.gameID}
+                      
+                      />
+                  </div>
                   
                 </div>
                 <div className="game-status">
@@ -172,7 +203,7 @@ function App() {
             </div>
           ))}
         </div>
-    </div>
+      </div>
   </>
   );
 }

@@ -94,4 +94,14 @@ li.main-list {
   background-color: #00ff00; /* Green background on hover */
 }
 
+.record{
+  display: inline-flex; /* Display items in a row */
+  font-size: small;
+  flex-direction: row;
+  align-items: center; /* Align items vertically in the center */
+  gap: 3px; /* Optional: adds space between items */
+ 
+  
+}
+
 
