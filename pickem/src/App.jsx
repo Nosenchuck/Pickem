@@ -15,7 +15,7 @@ function App() {
   //const [teams, setTeams] = useState([]);
   const [week, setWeek] = useState('1');
   const [season_type, setSeason_type] = useState('reg');
-  const [season, setSeason] = useState('2023');
+  const [season, setSeason] = useState('2024');
   //const [maxWeek, setMaxWeek] = useState(17);
   const [games, setGames] = useState([]);
   //const [gameScores, setGameScores] = useState([]);
@@ -42,6 +42,23 @@ const [selectedTeams, setSelectedTeams] = useState({});
       }
       return newSelectedTeams;
     });
+  };
+
+  const getDayOfWeek = (dateString) => {
+    const date = new Date(
+      parseInt(dateString.substring(0, 4)), // Year
+      parseInt(dateString.substring(4, 6)) - 1, // Month (0-based index)
+      parseInt(dateString.substring(6, 8)) // Day
+    );
+    const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    return daysOfWeek[date.getDay()];
+  };
+
+  const formatDate = (dateString) => {
+    const year = dateString.substring(0, 4);
+    const month = dateString.substring(4, 6);
+    const day = dateString.substring(6, 8);
+    return `${month}-${day}-${year}`;
   };
 
   //fetch weekly schedule for every season, week, and season type
@@ -147,9 +164,9 @@ const [selectedTeams, setSelectedTeams] = useState({});
          {/* select season */}
         <label htmlFor="season-select">Choose a season:</label>
         <select id="season-select" value={season} onChange={(e) => setSeason(e.target.value)}>
-          {Array.from({ length: 3 }, (_, i) => (
-            <option key={2022 + i} value={2022 + i}>
-              {2022 + i}
+          {Array.from({ length: 1 }, (_, i) => (
+            <option key={2024 + i} value={2024 + i}>
+              {2024 + i}
             </option>
           ))}
         </select>
@@ -160,7 +177,10 @@ const [selectedTeams, setSelectedTeams] = useState({});
               {/* Display team logos next to names if available */}
               <div className="game">
                 <div className="game-time">
-                  {<p>{game.gameTime}</p>}
+                  {
+                    <p>{game.gameTime}, {getDayOfWeek(game.gameDate)}, {formatDate(game.gameDate)} </p>
+                  }
+
                 </div>
                 <div
                   className={`away-team ${selectedTeams[game.gameID]?.type === 'away' && selectedTeams[game.gameID]?.id === game.teamIDAway ? 'selected' : ''}`}
