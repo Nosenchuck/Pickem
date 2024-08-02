@@ -172,7 +172,11 @@ const [selectedTeams, setSelectedTeams] = useState({});
         </select>
       </div>
       <div>
-          {games.map((game, index) => (
+          {games.map((game, index) => {
+             const currentEpoch = Math.floor(Date.now() / 1000); // Get current epoch time in seconds
+             const isGameTimePassed = currentEpoch >= parseFloat(game.gameTime_epoch);
+            return (
+
             <div key={index} className="game">
               {/* Display team logos next to names if available */}
               <div className="game">
@@ -182,10 +186,26 @@ const [selectedTeams, setSelectedTeams] = useState({});
                   }
 
                 </div>
+                {/* ----- use this to test keeping track of selected teams and showing record for correct picks
                 <div
-                  className={`away-team ${selectedTeams[game.gameID]?.type === 'away' && selectedTeams[game.gameID]?.id === game.teamIDAway ? 'selected' : ''}`}
-                  onClick={() => toggleTeamSelection(game.gameID, 'away', game.teamIDAway)}
-                >
+          className={`away-team ${selectedTeams[game.gameID]?.type === 'away' && selectedTeams[game.gameID]?.id === game.teamIDAway ? 'selected' : ''}`}
+          onClick={() => toggleTeamSelection(game.gameID, 'away', game.teamIDAway)}
+        >
+                */}
+
+                {/* -----use this so cant select pass game epoch time
+                <div
+                    className={`away-team ${selectedTeams[game.gameID]?.type === 'away' && selectedTeams[game.gameID]?.id === game.teamIDAway ? 'selected' : ''}`}
+                    onClick={!isGameTimePassed ? () => toggleTeamSelection(game.gameID, 'away', game.teamIDAway) : null}
+                    style={{ pointerEvents: isGameTimePassed ? 'none' : 'auto', opacity: isGameTimePassed ? 0.5 : 1 }}
+                  >
+                
+                */}
+                <div
+                    className={`away-team ${selectedTeams[game.gameID]?.type === 'away' && selectedTeams[game.gameID]?.id === game.teamIDAway ? 'selected' : ''}`}
+                    onClick={!isGameTimePassed ? () => toggleTeamSelection(game.gameID, 'away', game.teamIDAway) : null}
+                    style={{ pointerEvents: isGameTimePassed ? 'none' : 'auto', opacity: isGameTimePassed ? 0.5 : 1 }}
+                  >
                   <img src={team_img[game.teamIDAway]} alt="Away Team Logo" style={{ width: '50px' }} />
                   <p>{game.away}</p>
                   
@@ -211,10 +231,31 @@ const [selectedTeams, setSelectedTeams] = useState({});
                   
                   
                 </div>
+                {/* if epoch time has passed, game info opacity is reduced. 
+                possible change for styling purposes*/}
+
+                {/* ----test for record tracking
+
                 <div
-                  className={`home-team ${selectedTeams[game.gameID]?.type === 'home' && selectedTeams[game.gameID]?.id === game.teamIDHome ? 'selected' : ''}`}
-                  onClick={() => toggleTeamSelection(game.gameID, 'home', game.teamIDHome)}
-                >
+          className={`home-team ${selectedTeams[game.gameID]?.type === 'home' && selectedTeams[game.gameID]?.id === game.teamIDHome ? 'selected' : ''}`}
+          onClick={() => toggleTeamSelection(game.gameID, 'home', game.teamIDHome)}
+        >
+                
+                */}
+
+                {/* ----use this so cant select pass game epoch time
+                <div
+                    className={`home-team ${selectedTeams[game.gameID]?.type === 'home' && selectedTeams[game.gameID]?.id === game.teamIDHome ? 'selected' : ''}`}
+                    onClick={!isGameTimePassed ? () => toggleTeamSelection(game.gameID, 'home', game.teamIDHome) : null}
+                    style={{ pointerEvents: isGameTimePassed ? 'none' : 'auto', opacity: isGameTimePassed ? 0.5 : 1 }}
+                  >
+                
+                */}
+                <div
+                    className={`home-team ${selectedTeams[game.gameID]?.type === 'home' && selectedTeams[game.gameID]?.id === game.teamIDHome ? 'selected' : ''}`}
+                    onClick={!isGameTimePassed ? () => toggleTeamSelection(game.gameID, 'home', game.teamIDHome) : null}
+                    style={{ pointerEvents: isGameTimePassed ? 'none' : 'auto', opacity: isGameTimePassed ? 0.5 : 1 }}
+                  >
                   <img src={team_img[game.teamIDHome]} alt="Home Team Logo" style={{ width: '50px' }} />
                   <p>{game.home}</p>
                   <div className='record'>
@@ -243,8 +284,9 @@ const [selectedTeams, setSelectedTeams] = useState({});
               </div>
              
               
-            </div>
-          ))}
+              </div>
+            );
+          })}
         </div>
       </div>
   </>
