@@ -90,8 +90,13 @@ li.main-list {
   margin: 0;
 }
 
-.away-team:hover, .home-team:hover {
-  background-color: #2f00ff; /* Green background on hover */
+/*.away-team:hover, .home-team:hover {
+  background-color: #2f00ff; /* Green background on hover 
+}*/
+
+.selected {
+  border: 2px solid blue;
+  background-color: blue;
 }
 
 .record{
@@ -114,4 +119,8 @@ li.main-list {
 
 .highlight-red {
   color: red;
+}
+
+.game-time{
+  display: flex;
 }

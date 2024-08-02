@@ -24,14 +24,25 @@ function App() {
   const [wins, setWins] = useState([]);
   const [losses, setLosses] = useState([]);
   const [tie, setTie] = useState([]);
+
+//team select
+const [selectedTeams, setSelectedTeams] = useState({});
   
 
   //create route where user can select team to view team stats, current streak, ect
   
 
-  const selectTeam = () =>{
-
-  }
+  const toggleTeamSelection = (gameID, teamType, teamID) => {
+    setSelectedTeams((prevSelectedTeams) => {
+      const newSelectedTeams = { ...prevSelectedTeams };
+      if (newSelectedTeams[gameID]?.type === teamType && newSelectedTeams[gameID]?.id === teamID) {
+        delete newSelectedTeams[gameID];
+      } else {
+        newSelectedTeams[gameID] = { type: teamType, id: teamID };
+      }
+      return newSelectedTeams;
+    });
+  };
 
   //fetch weekly schedule for every season, week, and season type
   useEffect(() => {
@@ -148,9 +159,16 @@ function App() {
             <div key={index} className="game">
               {/* Display team logos next to names if available */}
               <div className="game">
-                <div className="away-team">
+                <div className="game-time">
+                  {<p>{game.gameTime}</p>}
+                </div>
+                <div
+                  className={`away-team ${selectedTeams[game.gameID]?.type === 'away' && selectedTeams[game.gameID]?.id === game.teamIDAway ? 'selected' : ''}`}
+                  onClick={() => toggleTeamSelection(game.gameID, 'away', game.teamIDAway)}
+                >
                   <img src={team_img[game.teamIDAway]} alt="Away Team Logo" style={{ width: '50px' }} />
                   <p>{game.away}</p>
+                  
                   <div className='record'>
                     <p>(</p>
                     <p>{wins[game.teamIDAway]}</p><p>-</p>
@@ -173,7 +191,10 @@ function App() {
                   
                   
                 </div>
-                <div className="home-team" onClick={selectTeam}>
+                <div
+                  className={`home-team ${selectedTeams[game.gameID]?.type === 'home' && selectedTeams[game.gameID]?.id === game.teamIDHome ? 'selected' : ''}`}
+                  onClick={() => toggleTeamSelection(game.gameID, 'home', game.teamIDHome)}
+                >
                   <img src={team_img[game.teamIDHome]} alt="Home Team Logo" style={{ width: '50px' }} />
                   <p>{game.home}</p>
                   <div className='record'>
